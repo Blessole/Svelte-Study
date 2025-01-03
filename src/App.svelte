@@ -1,47 +1,46 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import logo1 from "./assets/svelte.svg";
+  let logo2 = "/vite.svg";
+  let title = "영화제목1";
+  let year = 2024;
+  let category = "로맨스";
+  let textRed = "color: red;";
+
+  const data = [
+    {
+      title: "고질라 X 콩 : 뉴 엠파이어",
+      year: 2024,
+      category: "어드벤처, 액션, SF",
+    },
+    {
+      title: "듄: 파트2",
+      year: 2024,
+      category: "액션",
+    },
+  ];
 </script>
 
 <main>
+  <h1>영화정보</h1>
+  <img src={logo1} alt="" />
+  <img src={logo2} alt="" />
   <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+    <h3 class="bg-yellow" style={textRed}>{title}</h3>
+    <p>개봉 : {year}</p>
+    <p>장르 : {category}</p>
+    <p>{"hello".toUpperCase()}</p>
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  {#each data as movie, i}
+    <!-- content here -->
+    <h3 class="bg-yellow" style={textRed}>{i + 1} : {movie.title}</h3>
+    <p>개봉 : {movie.year}</p>
+    <p>장르 : {movie.category}</p>
+  {/each}
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
+  .bg-yellow {
+    background: gold;
+    padding: 10px;
   }
 </style>
