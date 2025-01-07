@@ -19,8 +19,19 @@
   const handleMovieNumber = (i) => {
     selectedMovie = i;
   };
+
+  // 이벤트 창 표시
+  let isEvent = true;
 </script>
 
+<div class={isEvent ? "event show" : "event"}>
+  <p>NETPLIX 강렬한 운명의 드라마, 경기크리처</p>
+  <button
+    onclick={() => {
+      isEvent = false;
+    }}>X</button
+  >
+</div>
 <Movies {data} bind:isModal {handleMovieNumber} {handleLike} />
 
 {#if isModal}
@@ -32,4 +43,30 @@
 {/if}
 
 <style>
+  .event {
+    width: 100%;
+    background-color: #666;
+    padding: 5px 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    text-align: center;
+    margin-bottom: 1em;
+
+    /* 창이 보이지 않게 */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s;
+  }
+
+  /* 기본 : 창이 보이게 */
+  .show {
+    opacity: 1;
+    max-height: 100px;
+  }
+  .event button {
+    padding: 2px;
+  }
 </style>
