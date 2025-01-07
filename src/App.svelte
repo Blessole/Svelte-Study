@@ -4,6 +4,10 @@
   import Movies from "./lib/components/Movies.svelte";
   import Event from "./lib/components/Event.svelte";
   import SearchBar from "./lib/components/SearchBar.svelte";
+  import { onDestroy, onMount } from "svelte";
+
+  // 이벤트 텍스트
+  const eventText = ["영화 정보 업데이트", "신규 영화 추가", "이벤트 진행 중"];
 
   // data 사본 추가 (검색기능용)
   let data_temp = [...data];
@@ -34,8 +38,47 @@
     selectedMovie = i;
   };
 
+  /* 이벤트 기능 (LifeCycle 활용해서 만들기) */
   // 이벤트 창 표시
   let isEvent = true;
+  // 이벤트 배열 번호 증가
+  let eventIndex = 0;
+  let intervalEventText;
+  onMount(() => {
+    // 일정시간 경과 후 eventIndex를 1 증가 -> 이벤트 문구 자동 변경되도록
+    // 3초 지나면 이벤트 인덱스가 1 증가
+    intervalEventText = setInterval(() => {
+      eventIndex += 1;
+
+      if (eventIndex >= eventText.length) {
+        eventIndex = 0;
+      }
+    }, 3000);
+  });
+
+  // 인터벌을 제거해주지 않으면, 컴포넌트가 없어지더라도 메모리에 계속 남아서 실행 됨
+  onDestroy(() => {
+    // 이벤트 인터벌 제거
+    // clearInterval(interval 이름)
+    clearInterval(intervalEventText);
+  });
+
+  /* 이벤트 기능 (Reactive 문법 사용해서 만들기) */
+  //eventIndex 값이 증가하면서 변화하니까 이를 Catch해서 실행하게 됨
+  $: {
+    // 이벤트 인터벌 제거
+    clearInterval(intervalEventText);
+
+    // 일정시간 경과 후 eventIndex를 1 증가 -> 이벤트 문구 자동 변경되도록
+    // 3초 지나면 이벤트 인덱스가 1 증가
+    intervalEventText = setInterval(() => {
+      eventIndex += 1;
+
+      if (eventIndex >= eventText.length) {
+        eventIndex = 0;
+      }
+    }, 3000);
+  }
 
   /* 검색 기능 */
   let alertText = "";
@@ -43,7 +86,7 @@
 
 <!-- <div class={isEvent ? "event show" : "event"}> -->
 {#if isEvent}
-  <Event bind:isEvent />
+  <Event bind:isEvent {eventText} {eventIndex} />
 {/if}
 
 <SearchBar {data} bind:data_temp bind:alertText />
