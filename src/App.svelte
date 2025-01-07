@@ -7,6 +7,8 @@
   };
 
   let isModal = false; // 모달창 변수 추가
+
+  let selectedMovie = 0; // 선택한 영화의 Index 변수 추가가
 </script>
 
 <main class="container">
@@ -29,6 +31,7 @@
           class="btn btn-primary"
           onclick={() => {
             isModal = true;
+            selectedMovie = i;
           }}>상세보기</button
         >
       </div>
@@ -39,7 +42,9 @@
 {#if isModal}
   <div class="modal">
     <div class="inner">
-      <h3>영화 상세 정보</h3>
+      <h3>{data[selectedMovie].title}</h3>
+      <p>{@html data[selectedMovie].story}</p>
+      <!-- <br>이 문자로 들어간 경우 innerHTML 실행하고 싶을 때, @html -->
       <button
         class="btn-close"
         onclick={() => {
