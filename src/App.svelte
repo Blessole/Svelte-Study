@@ -1,4 +1,5 @@
 <script>
+  import { fade, fly } from "svelte/transition";
   import data from "./lib/movies";
   import Modal from "./lib/components/Modal.svelte";
   import Movies from "./lib/components/Movies.svelte";
@@ -24,14 +25,22 @@
   let isEvent = true;
 </script>
 
-<div class={isEvent ? "event show" : "event"}>
-  <p>NETPLIX 강렬한 운명의 드라마, 경기크리처</p>
-  <button
-    onclick={() => {
-      isEvent = false;
-    }}>X</button
-  >
-</div>
+<!-- <div class={isEvent ? "event show" : "event"}> -->
+{#if isEvent}
+  <div class="event show" in:fly={{ y: -400, duration: 1000 }} out:fade>
+    <p>NETPLIX 강렬한 운명의 드라마, 경기크리처</p>
+    <button
+      onclick={() => {
+        isEvent = false;
+      }}>X</button
+    >
+  </div>
+{/if}
+<button
+  onclick={() => {
+    isEvent = true;
+  }}>이벤트 창 나타나기</button
+>
 <Movies {data} bind:isModal {handleMovieNumber} {handleLike} />
 
 {#if isModal}
