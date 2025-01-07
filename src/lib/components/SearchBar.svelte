@@ -1,18 +1,42 @@
 <script>
     let inputText = "";
-    let alertText = "";
-
+    export let alertText = "";
+    export let data = [];
+    export let data_temp = [];
+    // Reactive하게 반응하도록 변수 설정
     $: if (inputText.length > 16) {
         alertText = "입력 한도 초과";
     } else {
         alertText = "";
     }
+
+    // 입력한 영화제목이 데이터에 있는지 확인
+    const searchMovie = () => {
+        data_temp = data.filter((movie) => {
+            return movie.title.includes(inputText);
+        });
+
+        // 자료가 없을 경우 경고메시지 출력
+        if (data_temp.length === 0) {
+            alertText = "검색 결과가 없습니다.";
+        } else {
+            alertText = "";
+        }
+    };
 </script>
 
 <div class="search-box">
     <div class="input-group">
-        <input type="search" bind:value={inputText} />
-        <button>검색</button>
+        <input
+            type="search"
+            bind:value={inputText}
+            onkeydown={(e) => {
+                if (e.key === "Enter") {
+                    searchMovie();
+                }
+            }}
+        />
+        <button onclick={searchMovie}>검색</button>
     </div>
 </div>
 {#if alertText}

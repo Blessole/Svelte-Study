@@ -5,9 +5,21 @@
   import Event from "./lib/components/Event.svelte";
   import SearchBar from "./lib/components/SearchBar.svelte";
 
-  let likeCount = 0; // 좋아요 수를 저장할 변수
-  const handleLike = (i) => {
-    data[i].likeCount += 1;
+  // data 사본 추가 (검색기능용)
+  let data_temp = [...data];
+
+  const handleLike = (id) => {
+    // 원본데이터에서 해당 id에 해당하는 like 값 증가시키기
+    data.map((movie) => {
+      if (movie.id === id) {
+        movie.likeCount += 1;
+      }
+    });
+
+    // data_temp 있는 내용만 필터링해서 복사
+    data_temp = data.filter((movie) => {
+      return data_temp.includes(movie);
+    });
   };
 
   let isModal = false; // 모달창 변수 추가
@@ -24,6 +36,9 @@
 
   // 이벤트 창 표시
   let isEvent = true;
+
+  /* 검색 기능 */
+  let alertText = "";
 </script>
 
 <!-- <div class={isEvent ? "event show" : "event"}> -->
@@ -31,9 +46,19 @@
   <Event bind:isEvent />
 {/if}
 
-<SearchBar />
+<SearchBar {data} bind:data_temp bind:alertText />
 
-<Movies {data} bind:isModal {handleMovieNumber} {handleLike} />
+<!-- 전체보기 버튼 추가 -->
+<div class="container">
+  <button
+    onclick={() => {
+      data_temp = [...data]; // 복사본으로 초기화
+      alertText = ""; // 검색결과 초기화
+    }}>전체보기</button
+  >
+</div>
+
+<Movies {data_temp} bind:isModal {handleMovieNumber} {handleLike} />
 
 {#if isModal}
   <!-- 단방향props바인딩 : <자식컴포넌트이름 props명={전달값|변수명} /> -->
@@ -44,4 +69,7 @@
 {/if}
 
 <style>
+  .container {
+    text-align: center;
+  }
 </style>

@@ -1,5 +1,5 @@
 <script>
-    export let data = []; // 기본 값이 배열형식이라 []
+    export let data_temp = []; // 기본 값이 배열형식이라 []
     export let isModal = false;
     export let handleLike;
     // export let selectedMovie = 0; // 값에 바로 바인딩
@@ -10,7 +10,7 @@
 
 <main class="container">
     <h1>영화정보</h1>
-    {#each data as movie, i}
+    {#each data_temp as movie}
         <div class="item">
             <figure>
                 <img src={movie.imgUrl} alt={movie.title} />
@@ -21,7 +21,7 @@
                 <p>장르 : {movie.category}</p>
                 <button
                     onclick={() => {
-                        handleLike(i);
+                        handleLike(movie.id);
                     }}>좋아요 {movie.likeCount}</button
                 >
                 <button
@@ -29,7 +29,7 @@
                     onclick={() => {
                         isModal = true;
                         // selectedMovie = i;
-                        handleMovieNumber(i);
+                        handleMovieNumber(movie.id);
                     }}>상세보기</button
                 >
             </div>
