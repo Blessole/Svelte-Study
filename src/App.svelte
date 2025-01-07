@@ -1,5 +1,7 @@
 <script>
   import data from "./lib/movies";
+  import Modal from "./lib/components/Modal.svelte";
+
   let likeCount = 0; // 좋아요 수를 저장할 변수
   const handleLike = (i) => {
     data[i].likeCount += 1;
@@ -8,7 +10,11 @@
 
   let isModal = false; // 모달창 변수 추가
 
-  let selectedMovie = 0; // 선택한 영화의 Index 변수 추가가
+  let selectedMovie = 0; // 선택한 영화의 Index 변수 추가
+
+  const closeModal = () => {
+    isModal = false;
+  };
 </script>
 
 <main class="container">
@@ -40,19 +46,11 @@
 </main>
 
 {#if isModal}
-  <div class="modal">
-    <div class="inner">
-      <h3>{data[selectedMovie].title}</h3>
-      <p>{@html data[selectedMovie].story}</p>
-      <!-- <br>이 문자로 들어간 경우 innerHTML 실행하고 싶을 때, @html -->
-      <button
-        class="btn-close"
-        onclick={() => {
-          isModal = false;
-        }}>닫기</button
-      >
-    </div>
-  </div>
+  <!-- 단방향props바인딩 : <자식컴포넌트이름 props명={전달값|변수명} /> -->
+  <!-- svelte는 간결함을 지향하기 때문에, 전달값(속성명)과 변수명을 일반적으로 동일하게 사용하고, props명 없이 {변수명} 으로 사용함 -->
+  <!-- 양방향바인딩 : bind:변수명 -->
+  <!-- 자식에게 함수 전달 시 : props함수명={함수명} -->
+  <Modal {data} {selectedMovie} {closeModal} />
 {/if}
 
 <style>
@@ -81,25 +79,5 @@
 
   .item .info {
     width: 100%;
-  }
-
-  /* Modal 관련 */
-  .modal {
-    background: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal .inner {
-    background-color: #fff;
-    width: 80%;
-    padding: 20px;
-    border-radius: 10px;
   }
 </style>
